@@ -18,4 +18,11 @@ func (c *UserController) Register() {
 		return
 	}
 	beego.Debug("解析表单内容：", &form)
+
+	if err := c.VerifyForm(&form); err != nil {
+		beego.Debug("验证表单：", err)
+		c.Data["json"] = models.NewErrorInfo(ErrInputData)
+		c.ServeJSON()
+		return
+	}
 }
