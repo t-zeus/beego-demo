@@ -1,12 +1,21 @@
 package controllers
 
-import "beego"
+import (
+	"beego"
+	"beego-demo/models"
+)
 
 type UserController struct {
-	beego.Controller
+	BaseController
 }
 
 func (c *UserController) Register() {
-	c.Data["json"] = "hello"
-	c.ServeJSON()
+	form := models.RegisterForm{}
+	if err := c.ParseForm(&form); err != nil {
+		beego.Debug("解析注册表单：", err)
+		c.Data["json"] = models.NewErrorInfo(ErrInputData)
+		c.ServeJSON()
+		return
+	}
+	beego.Debug("解析表单内容：", &form)
 }
