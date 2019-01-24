@@ -15,7 +15,7 @@ type User struct {
 	RegDate  time.Time
 }
 
-func salt() ([]byte, error) {
+func salt() (string, error) {
 	salt := make([]byte, 64)
 	/*
 		// 这个位置调用 io.ReadFull 多余，rand.Read 底层就是调用了 io.ReadFull
@@ -24,13 +24,13 @@ func salt() ([]byte, error) {
 		}
 	*/
 	if _, err := rand.Reader.Read(salt); err != nil {
-		return []byte{}, err
+		return "", err
 	}
-	return salt, nil
+	return fmt.Sprintf("%x", salt), nil
 }
 
-func hash(pwd string, salt []byte) (string, error) {
-	hash, err := scrypt.Key([]byte(pwd), salt, 16384, 8, 1, 64)
+func hash(pwd string, salt string) (string, error) {
+	hash, err := scrypt.Key([]byte(pwd), []byte(salt), 16384, 8, 1, 64)
 	if err != nil {
 		return "", err
 	}
