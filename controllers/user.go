@@ -3,6 +3,7 @@ package controllers
 import (
 	"beego"
 	"beego-demo/models"
+	"time"
 )
 
 type UserController struct {
@@ -25,4 +26,13 @@ func (c *UserController) Register() {
 		c.ServeJSON()
 		return
 	}
+	regDate := time.Now()
+	user, err := models.NewUser(&form, regDate)
+	if err != nil {
+		beego.Error("NewUser:", err)
+		c.Data["json"] = models.NewErrorInfo(ErrSystem)
+		c.ServeJSON()
+		return
+	}
+	beego.Debug("NewUser:", user)
 }

@@ -8,6 +8,7 @@ import (
 
 const (
 	ErrInputData = "数据输出错误"
+	ErrSystem    = "系统操作错误"
 )
 
 // 父级
