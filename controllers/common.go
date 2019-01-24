@@ -18,17 +18,18 @@ type BaseController struct {
 // 在父级上封装表单验证函数
 func (c *BaseController) VerifyForm(v interface{}) error {
 	valid := validation.Validation{}
-	ok, err := valid.Valid(&v)
+	// Valid 的内容：结构体或结构体指针
+	ok, err := valid.Valid(v)
 	if err != nil {
 		return err
 	}
 	// 参数验证不通过
 	if !ok {
-		msg := ""
+		text := ""
 		for _, err := range valid.Errors {
-			msg += err.Key + ":" + err.Message + ";"
+			text += err.Key + ":" + err.Message + ";"
 		}
-		return errors.New(msg)
+		return errors.New(text)
 	}
 	return nil
 }
